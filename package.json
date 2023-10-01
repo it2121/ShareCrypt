@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "bulma": "^0.9.4",
+    "datatables.net-dt": "^1.13.6"
+  }
+}

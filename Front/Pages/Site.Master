@@ -1,0 +1,138 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Front.Pages.Site" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+
+
+
+
+
+      <link href="../Libs/jquery.dataTables.min.css" rel="stylesheet" />
+     <script src="../Libs/bootstrap.min.js"></script>
+        <script src="../Libs/jquery.min.js"></script>
+        <script src="../Libs/popper.min.js"></script>
+        <script src="../Libs/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script src="../Libs/main.js"></script>
+        <script src="../Libs/jquery-3.3.1.slim.min.js"></script>
+        <script src="../Libs/jquery.dataTables.min.js"></script>
+        <link href="../Libs/bootstrap.min.css" rel="stylesheet" />
+        <link href="../Libs/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
+        <link href="../Libs/all.css" rel="stylesheet" />
+        <link href="../Libs/main.css" rel="stylesheet" />
+        <link href="../Libs/sidebar-themes.css" rel="stylesheet" />
+        <script src="../Libs/dataTables.bulma.min.js"></script>
+        <link href="../Libs/bulma.min.css" rel="stylesheet" />
+            <link href="../Libs/dataTables.bulma.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/334e818a85.js" crossorigin="anonymous"></script>
+
+
+        <asp:ContentPlaceHolder ID="head" runat="server">
+
+     
+
+    </asp:ContentPlaceHolder>
+   <style>
+
+
+       .body {
+    background-image: url("../Images/bg.jpg");
+    background-repeat:repeat;
+    background-color: #ffffff;
+    background-size: 39%;
+    font-family: sans-serif;
+ 
+}
+
+
+
+
+   </style>
+  
+    </head>
+
+</html>
+
+        <!doctype html>
+<html lang="en">
+<body  style="width:100%; max-width:100%;height:100%; max-height:100%">
+    
+
+    <form id="form1" runat="server" style="width:100%; max-width:100%;height:100%; max-height:100%">
+
+            <asp:Panel runat="server" ID="NavBar" Visible="false">
+
+        <div><nav class="navbar is-light" role="navigation" aria-label="main navigation" style="background-color:#ffe8d8">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="" style="max-height:3.5rem">
+
+                                      <img src="../Images/SCLogoNoText.png" style="max-height:3.5rem">
+
+    </a>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+
+  </div>
+
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    
+
+      
+      <div class="navbar-item" style="  position: relative;
+  top: 50%;
+  left: 46.9%;
+  transform: translate(-50%, -50%);
+
+  ">
+
+          
+          <img src="../Images/Text.png" style="max-height:2.6rem;">
+
+      
+
+      </div>
+     
+
+
+    <div class="navbar-end">
+
+      <div class="navbar-item">
+        <div class="buttons">
+          <a class="button is-light">
+           <asp:Label runat="server" ID="UserFullNameLbl" Text="" Font-Bold="true"  ></asp:Label>
+          </a>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+             </div>
+             </asp:Panel>
+      
+                    <div style="width:100%; max-width:100%;height:100%; max-height:100%">
+
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server" >
+            </asp:ContentPlaceHolder>
+
+                        </div>
+                <script>
+
+            new DataTable('.table');
+
+                </script>
+   
+       
+    
+    </form>
+</body>
+</html>
