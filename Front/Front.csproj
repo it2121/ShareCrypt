@@ -125,6 +125,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Files\m.ttf" />
+    <Content Include="Files\r.ttf" />
     <None Include="packages.config" />
     <Content Include="Pages\Site.Master" />
     <None Include="Web.Debug.config">

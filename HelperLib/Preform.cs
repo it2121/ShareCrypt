@@ -23,6 +23,32 @@ namespace HelperLib
     public static class Preform
     {
 
+        public static void InsertFF(Users user, FF ff)
+        {
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    Name = ff.Name,
+                    Type = ff.Type,
+                    Data = ff.Data,
+                    Size = ff.Size,
+                    OwnerID = user.ID,
+                    Date = ff.Date
+
+                };
+
+               
+                string sql = "dbo.InsertFF";
+
+
+                cnn.Execute(sql, pp, commandType: CommandType.StoredProcedure);
+
+             
+
+             
+            }
+        }
         public static IEnumerable<Users> GetAllUsers()
         {
             //string text = "";
