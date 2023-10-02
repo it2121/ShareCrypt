@@ -70,10 +70,91 @@
         <!DOCTYPE html>
 
 
+            <div class="row " style="margin-bottom:1em">
+    
+                
+
+                      <div class="col-auto">
+                <div class="field buttons align-items-end">
+
+                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
+
+</button>--%>
 
 
-        <div class="row">
-            <div class="col-9">
+
+     <linkbutton style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Manage  Files"
+                        data-target="modal-js-example"
+                        class="js-modal-trigger button is-fullwidth  align align-content-center  button is-ou">Manage Files  
+                        
+                        <i class="fas fa-edit " style="margin-left: 1em">
+
+                        </i></linkbutton>
+
+                </div>
+            </div>
+                 <div class="col-lg">
+                     </div>
+                   <div class="col-auto">
+                <div class="field buttons align-items-end">
+
+                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
+
+</button>--%>
+
+
+
+     <linkbutton style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Encrypt Files"
+                        data-target="modal-js-example"
+                        class="js-modal-trigger button is-fullwidth  align align-content-center  button is-ou">Encrypt Files  
+                        
+                        <i class="fas fa-hashtag " style="margin-left: 1em">
+
+                        </i></linkbutton>
+
+                </div>
+            </div>
+                   <div class="col-auto  ">
+                <div class="field buttons align-items-end ">
+
+                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
+
+</button>--%>
+
+
+
+                    <asp:LinkButton style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Share Files"
+                       runat="server"
+                        OnClick="ShowShareButtons"
+                        class="js-modal-trigger button is-fullwidth  align align-content-center  button is-ou">Share Files  
+                        
+                        <i class="fas fa-share " style="margin-left: 1em">
+
+                        </i></asp:LinkButton>
+
+
+                </div>
+            </div>
+
+            <div class="col-auto">
+                <div class="field buttons align-items-end">
+
+                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
+
+</button>--%>
+
+
+
+                    <linkbutton style="background-color: #f39658; color: white; font: bold;" text="Upload File" data-target="modal-js-example" class="js-modal-trigger button is-fullwidth  align align-content-center ">Upload File   <i class="fas fa-upload " style="margin-left: 1em"></i></linkbutton>
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" >
+            <div class="col-12">
 
                 <nav class="breadcrumb bg-light" aria-label="breadcrumbs">
                     <ul id="NavBtnList" runat="server">
@@ -84,20 +165,8 @@
                 </nav>
             </div>
 
-            <div class="col-3">
-                <div class="field buttons align-items-end">
-
-                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
-
-</button>--%>
 
 
-
-                    <linkbutton style="background-color: #f39658; color: white; font: bold;" text="Upload File" data-target="modal-js-example" class="js-modal-trigger button is-fullwidth  align align-content-center ">Upload File   <i class="fas fa-upload " style="margin-left: 2em"></i></linkbutton>
-
-
-                </div>
-            </div>
         </div>
         <div class="row">
 
@@ -119,17 +188,30 @@
 
 
 
+                        
 
 
-
-                        <asp:TemplateColumn HeaderText="Select">
-                            <ItemTemplate>
-                                <asp:LinkButton BackColor="#F39658" class="btn  btn-primary border-0 hover" ID="btn_Edit1" runat="server" OnClick="DownloadFile" alt=' <%# ((Eval("FFID"))) %> ' ToolTip=' <%# ((Eval("FFID"))) %> '> Select <i class="fas fa-check " ></i></asp:LinkButton>
+                        <asp:TemplateColumn   HeaderText="Download" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
+                            <ItemTemplate >
+                                <asp:LinkButton Width="20px" Height="20px" class="button is-primary is-outlined " ID="btn_Share" runat="server" OnClick="DownloadFile" alt=' <%# ((Eval("OwnerID"))) %> ' ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-download " ></i></asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateColumn>
+
+                          <asp:TemplateColumn  Visible="false"  HeaderText="Share" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
+                            <ItemTemplate  >
+                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-primary is-outlined" ID="btn_Download" runat="server" OnClick="DownloadFile" alt=' <%# ((Eval("OwnerID"))) %> ' ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-share " ></i></asp:LinkButton>
+                            </ItemTemplate>
+                        </asp:TemplateColumn>
+
+
                     </Columns>
 
                 </asp:DataGrid>
+                <script>
+
+
+
+                </script>
             </div>
         </div>
     </div>

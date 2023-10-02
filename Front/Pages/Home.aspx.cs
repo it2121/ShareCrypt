@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Xml.Linq;
 
 namespace Front.Pages
 {
@@ -156,6 +157,20 @@ namespace Front.Pages
         }
 
 
+        protected void ShowShareButtons(object sender, EventArgs e) 
+        {
+          // DataGridUsers.Columns[1].Visible= true;
+
+            foreach (DataGridColumn dc in DataGridUsers.Columns) { 
+            
+                if (dc.HeaderText.Equals("Share"))
+                    dc.Visible = true;
+
+
+            }
+
+
+        }
         protected void Upload(object sender, EventArgs e)
         {
             if (SetUpFile()) { 
@@ -164,6 +179,28 @@ namespace Front.Pages
         }
         protected void DownloadFile(object sender, EventArgs e)
         {
+            FF SelectedFile = new FF();
+        
+            SelectedFile.FFID =Convert.ToInt32(((LinkButton)sender).ToolTip);
+            SelectedFile = Preform.GetFF(SelectedFile);
+
+
+
+            ByteArrayToDownload(SelectedFile);
+
+      
+
+        }
+
+        public void ByteArrayToDownload(FF SelectedFile) {
+
+            Response.ContentType = SelectedFile.Type;
+            Response.Clear();
+            Response.BufferOutput = true;
+            Response.AppendHeader("Content-Disposition", "attachment; filename=" + SelectedFile.Name);
+            Response.BinaryWrite(SelectedFile.Data);
+            Response.Flush();
+
 
         }
         protected void FileNavClick(object sender, EventArgs e)

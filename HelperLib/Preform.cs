@@ -117,6 +117,37 @@ namespace HelperLib
             return u;
         
         }
+        public static FF GetFF(FF ff)
+        {
 
+
+            //string text = "";
+            IEnumerable<FF> FF;
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    FFID=ff.FFID
+
+                };
+
+                string sql = "dbo.GetFF";
+                FF = cnn.Query<FF>(sql, pp, commandType: CommandType.StoredProcedure);
+
+
+
+                /*   foreach (var p in FFs)
+                   {
+                       text+= $"{p.Username} {p.Email} {p.Fullname}";
+                   }*/
+            }
+            FF u = null;
+            foreach (var p in FF)
+            {
+                u = p;
+            }
+            return u;
+
+        }
     }
 }
