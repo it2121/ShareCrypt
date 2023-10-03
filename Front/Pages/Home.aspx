@@ -9,10 +9,27 @@
             $(document).ready(function () {
                 $('#DataGridUsers').DataTable();
             });
-            $(".table").prepend($("<thead></thead>").append($(this).find("tr:first"))).dataTable();
-            $('.table1').DataTable();
-        });
+            $(".table").prepend($("<thead></thead>").append($(this).find("tr:first"))).dataTable({
+                order: [ [2, 'asc'],[4, 'desc']]
 
+            });
+            $('.table1').DataTable();
+
+
+        });
+      
+    </script>
+
+    <script>
+
+        function showFolderName() {
+            document.getElementById('FolderNamePanel').style.display = "block";
+            document.getElementById('UploadPanel').style.display = "none";
+        }
+        function showUploadFile() {
+            document.getElementById('FolderNamePanel').style.display = "none";
+            document.getElementById('UploadPanel').style.display = "block";
+        }
     </script>
     <script>
 
@@ -72,6 +89,26 @@
 
             <div class="row " style="margin-bottom:1em">
     
+                      <div class="col-auto">
+                <div class="field buttons align-items-end">
+
+                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
+
+</button>--%>
+
+
+
+     <linkbutton style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="New Folder"
+                        data-target="modal-js-example"
+                        onclick="showFolderName()"
+                        class="js-modal-trigger button is-fullwidth  align align-content-center  button is-ou">New Folder  
+                       
+                        <i class="fas fa-add " style="margin-left: 1em">
+
+                        </i></linkbutton>
+
+                </div>
+            </div>
                 
 
                       <div class="col-auto">
@@ -145,7 +182,7 @@
 
 
 
-                    <linkbutton style="background-color: #f39658; color: white; font: bold;" text="Upload File" data-target="modal-js-example" class="js-modal-trigger button is-fullwidth  align align-content-center ">Upload File   <i class="fas fa-upload " style="margin-left: 1em"></i></linkbutton>
+                    <linkbutton                          onclick=" showUploadFile()" style="background-color: #f39658; color: white; font: bold;" text="Upload File" data-target="modal-js-example" class="js-modal-trigger button is-fullwidth  align align-content-center ">Upload File   <i class="fas fa-upload " style="margin-left: 1em"></i></linkbutton>
 
 
                 </div>
@@ -179,6 +216,13 @@
 
 
                     <Columns>
+                             <asp:TemplateColumn  Visible="true"  HeaderText="" ItemStyle-Width="2em" ItemStyle-HorizontalAlign="center">
+                            <ItemTemplate  >
+                           <asp:Image ID="imgCover" runat="server" AlternateText="Image Cover" ImageUrl='<%# Eval("Type").ToString() == "- Folder" ? "../Images/folder.png" : "../Images/file.png" %>' />
+                          
+
+                            </ItemTemplate>
+                        </asp:TemplateColumn>
                         <asp:BoundColumn Visible="false" HeaderText="FFID" DataField="FFID" />
                         <asp:BoundColumn Visible="false"  HeaderText="OwnerID" DataField="OwnerID" />
                         <asp:BoundColumn HeaderText="Name" DataField="Name" />
@@ -188,18 +232,18 @@
 
 
 
-                        
+                       
 
-
-                        <asp:TemplateColumn   HeaderText="Download" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
+                        <asp:TemplateColumn   HeaderText="" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
                             <ItemTemplate >
-                                <asp:LinkButton Width="20px" Height="20px" class="button is-primary is-outlined " ID="btn_Share" runat="server" OnClick="DownloadFile" alt=' <%# ((Eval("OwnerID"))) %> ' ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-download " ></i></asp:LinkButton>
+                                <asp:LinkButton Width="20px" Height="20px" class="button is-primary is-outlined "  Visible='<%# Eval("Type").ToString() == "- Folder" ? false:true  %>'  ID="btn_file"   runat="server" OnClick= "DownloadFile"   ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-download " ></i></asp:LinkButton>
+                                <asp:LinkButton Width="20px" Height="20px" class="button is-primary is-outlined "  Visible='<%# Eval("Type").ToString() == "- Folder" ? true:false  %>'  ID="btn_folder" runat="server" OnClick=  "EnterFolder"    ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class= "fa-solid fa-right-to-bracket"  ></i></asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateColumn>
 
                           <asp:TemplateColumn  Visible="false"  HeaderText="Share" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
                             <ItemTemplate  >
-                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-primary is-outlined" ID="btn_Download" runat="server" OnClick="DownloadFile" alt=' <%# ((Eval("OwnerID"))) %> ' ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-share " ></i></asp:LinkButton>
+                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-primary is-outlined" ID="btn_Download" runat="server"  alt=' <%# ((Eval("OwnerID"))) %> ' ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-share " ></i></asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateColumn>
 
@@ -224,6 +268,70 @@
 
         <div class="modal-content">
             <div class="box bg-light">
+
+
+
+
+
+
+                    <panel id="FolderNamePanel" style="display:none;">
+
+                <p>New Folder</p>
+
+
+                <br />
+
+
+                <div class="row">
+                    <div class="col-12">
+                         <center>
+                   
+                        <asp:TextBox runat="server"  ID="NewFolderName" class="input is-warning " BackColor="LightGray" placeholder="File Address"></asp:TextBox>
+                       
+                                </center>
+                    </div>
+      
+                </div>
+                <br />
+                <br />
+              
+                <div class="row">
+                   
+                    <div class="col-12">
+   <center>
+                   <asp:LinkButton ID="CreateNewFolderBtn"  onclick="CreateNewFolder" runat="server" Font-Bold="true" Width="75%" BackColor="#f39658" Text="Create" class=" button is-fullwidth  align align-content-center text-white ">Create <i class="fas fa-create " style="margin-left: 2em"></i></asp:LinkButton>
+
+         </center>
+                    </div>
+                </div>
+                   
+                <br />
+
+                </panel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%>
+                <%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%>
+                <%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%>
+
+                <panel id="UploadPanel" style="display:none;">
+
                 <p>Upload File</p>
 
 
@@ -262,6 +370,9 @@
                 </div>
                    
                 <br />
+
+                </panel>
+
             </div>
         </div>
 

@@ -2,6 +2,7 @@
 using HelperLib.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Drawing;
@@ -12,14 +13,18 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Front.Pages
 {
     public partial class Home : System.Web.UI.Page
     {
-       static FF ff = new FF();
-
+        static FF ff = new FF();
+        static int CurrentFolderID = 1;
+        static DataTable FFs = null;
+        static DataTable OwnedFFs = null;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -29,36 +34,13 @@ namespace Front.Pages
 
 
                 Session["redirected"] = "0";
-                IEnumerable<FF> UsersList = Preform.GetAllFF();
-                DataTable dt = IEnumerableExt.Ext_ToDataTable(UsersList);
 
-
-                dt.Columns.Remove("Data");
-
-
-
-
-                DataGridUsers.DataSource = dt;
-
-
-                DataGridUsers.DataBind();
-
-
-
-
-
-
-
-            }
-
-      /*      if (IsPostBack && FileUploadControl.PostedFile != null)
-            {
-                if (FileUploadControl.PostedFile.FileName.Length > 0)
+                if ((Users)Session["User"] != null)
                 {
-                   FileAdrs.Text = Path.GetFileName(FileUploadControl.PostedFile.FileName);
+                    SelectFolder(1);
 
                 }
-            }*/
+            }
 
 
 
@@ -86,20 +68,64 @@ namespace Front.Pages
 
 
         }
-        public void refresh() {
-            IEnumerable<FF> UsersList = Preform.GetAllFF();
-            DataTable dt = IEnumerableExt.Ext_ToDataTable(UsersList);
+        public void SelectFolder(int folderID = -1)
+        {
+
+            if (folderID != CurrentFolderID)
+            {
+                CurrentFolderID = folderID;
 
 
-            dt.Columns.Remove("Data");
+            }
 
 
 
+            Users user = (Users)Session["User"];
 
-            DataGridUsers.DataSource = dt;
+
+            IEnumerable<FF> GerFFs = Preform.GetUserFF(user);
+            IEnumerable<OwnedFF> OwnedFF = Preform.GetOwnedFF(user);
+
+            FFs = IEnumerableExt.Ext_ToDataTable(GerFFs);
+            OwnedFFs = IEnumerableExt.Ext_ToDataTable(OwnedFF);
+
+
+
+            FFs.Columns.Remove("Data");
+            DataTable ShownFiles = FFs.Clone();
+
+
+            ShownFiles.Rows.Clear();
+
+            int i = 0;
+            foreach (DataRow dr in FFs.Rows)
+            {
+
+                if (OwnedFF.ElementAt(i).ParantID == CurrentFolderID)
+                {
+
+
+                    ShownFiles.ImportRow(dr);
+
+                }
+                i++;
+            }
+
+           
+            DataGridUsers.DataSource = ShownFiles;
 
 
             DataGridUsers.DataBind();
+
+
+
+
+
+        }
+        public void refresh()
+        {
+
+            SelectFolder(CurrentFolderID);
 
 
         }
@@ -115,7 +141,7 @@ namespace Front.Pages
                 string size = "";
 
                 //      string sizeInMb =  (FileUploadControl.PostedFile.ContentLength/1024.0/1024.0).ToString("0.0") + " - Mb";
-                if ((FileUploadControl.PostedFile.ContentLength / 1024/1024) == 0)
+                if ((FileUploadControl.PostedFile.ContentLength / 1024 / 1024) == 0)
                 {
 
                     size = (FileUploadControl.PostedFile.ContentLength / 1024.0).ToString("0.0") + " - KB";
@@ -135,7 +161,7 @@ namespace Front.Pages
                 /*
                             FileInfo fi = new FileInfo(filename);
                             string ext = fi.Extension;*/
-               // FileAdrs.Text = filename;
+                // FileAdrs.Text = filename;
                 if (filename.Length != 0)
                 {
                     string contentType = FileUploadControl.PostedFile.ContentType;
@@ -153,16 +179,17 @@ namespace Front.Pages
 
             }
             else { return false; }
-            
+
         }
 
 
-        protected void ShowShareButtons(object sender, EventArgs e) 
+        protected void ShowShareButtons(object sender, EventArgs e)
         {
-          // DataGridUsers.Columns[1].Visible= true;
+            // DataGridUsers.Columns[1].Visible= true;
 
-            foreach (DataGridColumn dc in DataGridUsers.Columns) { 
-            
+            foreach (DataGridColumn dc in DataGridUsers.Columns)
+            {
+
                 if (dc.HeaderText.Equals("Share"))
                     dc.Visible = true;
 
@@ -171,28 +198,79 @@ namespace Front.Pages
 
 
         }
+        protected void CreateNewFolder(object sender, EventArgs e)
+        {
+
+
+            if(NewFolderName.Text.Length>0)
+            { 
+                ff.Name = NewFolderName.Text;
+                ff.Type = "- Folder";
+                ff.Size = null;
+                ff.Date = DateTime.Now.ToString("MM / dd / yyyy hh: mm tt");
+                ff.Data = null;
+
+                InsertFFsAndFolders();
+            }
+
+
+
+
+        }
+        public void InsertFFsAndFolders() {
+
+            int newFFID = Preform.InsertFF((Users)Session["User"], ff);
+            Preform.InsertOwnedFF((Users)Session["User"], newFFID, CurrentFolderID);
+
+
+
+
+            refresh();
+
+        }
         protected void Upload(object sender, EventArgs e)
         {
-            if (SetUpFile()) { 
- Preform.InsertFF((Users)Session["User"], ff);
-                refresh();    }
+
+
+
+            if (SetUpFile())
+            {
+             
+
+                InsertFFsAndFolders();
+            }
+
+
+
+
         }
-        protected void DownloadFile(object sender, EventArgs e)
-        {
-            FF SelectedFile = new FF();
         
-            SelectedFile.FFID =Convert.ToInt32(((LinkButton)sender).ToolTip);
+                protected void DownloadFile(object sender, EventArgs e)
+        {
+
+            FF SelectedFile = new FF();
+
+            SelectedFile.FFID = Convert.ToInt32(((LinkButton)sender).ToolTip);
             SelectedFile = Preform.GetFF(SelectedFile);
 
 
 
             ByteArrayToDownload(SelectedFile);
 
-      
+
+
 
         }
+        protected void EnterFolder(object sender, EventArgs e)
+        {
 
-        public void ByteArrayToDownload(FF SelectedFile) {
+
+        }
+         
+        
+   
+        public void ByteArrayToDownload(FF SelectedFile)
+        {
 
             Response.ContentType = SelectedFile.Type;
             Response.Clear();

@@ -23,30 +23,52 @@ namespace HelperLib
     public static class Preform
     {
 
-        public static void InsertFF(Users user, FF ff)
+        public static void InsertOwnedFF(Users user, int ffid, int parantID)
         {
+            
             using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
             {
                 var pp = new
                 {
-                    Name = ff.Name,
-                    Type = ff.Type,
-                    Data = ff.Data,
-                    Size = ff.Size,
-                    OwnerID = user.ID,
-                    Date = ff.Date
+                    UserID = user.ID,
+                    FFID = ffid,
+                    ParantID = parantID
 
                 };
 
-               
-                string sql = "dbo.InsertFF";
+
+                string sql = "dbo.InsertOwnedFF";
 
 
                 cnn.Execute(sql, pp, commandType: CommandType.StoredProcedure);
 
-             
 
-             
+
+
+            }
+        }
+        public static int InsertFF(Users user, FF ff)
+        {
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+              
+                var p = new DynamicParameters();
+                p.Add("@FFID", 0, DbType.Int32, ParameterDirection.Output);
+                p.Add("@OwnerID", user.ID);
+                p.Add("@Name", ff.Name);
+                p.Add("@Type", ff.Type);
+                p.Add("@Data", ff.Data,DbType.Binary);
+                p.Add("@Size", ff.Size);
+                p.Add("@Date", ff.Date);
+
+                string sql = "dbo.InsertFF";
+
+
+                cnn.Execute(sql, p, commandType: CommandType.StoredProcedure);
+
+                return p.Get<int>("@FFID");
+
+
             }
         }
         public static IEnumerable<Users> GetAllUsers()
@@ -83,6 +105,70 @@ namespace HelperLib
                    }*/
             }
             return FFs;
+        }
+
+        public static IEnumerable<OwnedFF> GetOwnedFF(Users user)
+        {
+
+
+
+            IEnumerable<OwnedFF> FFs;
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    @UserID = user.ID
+
+                };
+
+                string sql = "dbo.GetOwnedFF";
+                FFs = cnn.Query<OwnedFF>(sql, pp, commandType: CommandType.StoredProcedure);
+
+
+
+            }
+
+            return FFs;
+
+            /*  FF u=null;
+            foreach (var p in FFs) 
+            {
+              u= p;
+            }
+            return u;*/
+
+        }
+
+        public static IEnumerable<FF> GetUserFF(Users user)
+        {
+
+
+
+             IEnumerable<FF> FFs ;
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    @UserID = user.ID
+
+                };
+
+                string sql = "dbo.GetOwnedFF";
+                FFs = cnn.Query< FF>(sql, pp, commandType: CommandType.StoredProcedure);
+
+              
+
+            }
+
+            return FFs;
+            
+            /*  FF u=null;
+            foreach (var p in FFs) 
+            {
+              u= p;
+            }
+            return u;*/
+        
         }
         public static Users LogIn(string username1,string password1)
         {
