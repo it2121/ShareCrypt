@@ -160,7 +160,7 @@
 
 
 
-                    <asp:LinkButton style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Share Files"
+                    <asp:LinkButton  ID="TestButton"  style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Share Files"
                        runat="server"
                         OnClick="ShowShareButtons"
                         class="js-modal-trigger button is-fullwidth  align align-content-center  button is-ou">Share Files  
@@ -182,7 +182,7 @@
 
 
 
-                    <linkbutton                          onclick=" showUploadFile()" style="background-color: #f39658; color: white; font: bold;" text="Upload File" data-target="modal-js-example" class="js-modal-trigger button is-fullwidth  align align-content-center ">Upload File   <i class="fas fa-upload " style="margin-left: 1em"></i></linkbutton>
+                    <linkbutton                         onclick=" showUploadFile()" style="background-color: #f39658; color: white; font: bold;" text="Upload File" data-target="modal-js-example" class="js-modal-trigger button is-fullwidth  align align-content-center ">Upload File   <i class="fas fa-upload " style="margin-left: 1em"></i></linkbutton>
 
 
                 </div>
@@ -194,10 +194,16 @@
             <div class="col-12">
 
                 <nav class="breadcrumb bg-light" aria-label="breadcrumbs">
-                    <ul id="NavBtnList" runat="server">
-                        <li id="RootBtnLi" runat="server">
-                            <asp:LinkButton runat="server" Text="aaa" class="button bg-transparent border-0" Height="1em" OnClick="FileNavClick" ToolTip="1" Enabled="true" Visible="true" />
-                        </li>
+
+                    <asp:PlaceHolder runat="server" ID="PlaceHolder">
+
+
+
+                    </asp:PlaceHolder>
+                    <ul id="navbtnlist" runat="server">
+                    <%--    <li id="rootbtnli" runat="server">
+                            <asp:linkbutton   runat ="server" onclick="NabBarClick"  text="root" class="button bg-transparent border-0" height="1em" tooltip="1" enabled="true" visible="true" />
+                        </li>--%>
                     </ul>
                 </nav>
             </div>

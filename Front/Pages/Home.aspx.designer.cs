@@ -15,22 +15,31 @@ namespace Front.Pages
     {
 
         /// <summary>
-        /// NavBtnList control.
+        /// TestButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl NavBtnList;
+        protected global::System.Web.UI.WebControls.LinkButton TestButton;
 
         /// <summary>
-        /// RootBtnLi control.
+        /// PlaceHolder control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl RootBtnLi;
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder;
+
+        /// <summary>
+        /// navbtnlist control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl navbtnlist;
 
         /// <summary>
         /// DataGridUsers control.

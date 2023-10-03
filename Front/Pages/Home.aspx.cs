@@ -37,35 +37,160 @@ namespace Front.Pages
 
                 if ((Users)Session["User"] != null)
                 {
-                    SelectFolder(1);
+                    SelectFolder(CurrentFolderID);
 
                 }
+
+            }
+          
+                SetNavBar();
+
+
+
+            
+
+
+        }
+
+        public void SetNavBar() {
+            if (FilesNabBarLi.Count == 0)
+            {
+
+                HtmlGenericControl newLi = new HtmlGenericControl("li");
+
+                newLi.Attributes.Add("Height", "1em");
+
+
+                LinkButton LinkButton1 = new LinkButton();
+
+
+
+
+                LinkButton1.Text = "Root";
+                LinkButton1.ToolTip = "1";
+                LinkButton1.Click += new EventHandler(NabBarClick);
+
+
+                FilesNabBarButtons.Add(LinkButton1);
+                FilesNabBarLi.Add(newLi);
+
+                newLi.Controls.Add(LinkButton1);
+                navbtnlist.Controls.Add(newLi);
+
+
+            }
+            else
+            {
+
+                foreach (LinkButton lb in FilesNabBarButtons)
+
+                {
+
+                    HtmlGenericControl newLi = new HtmlGenericControl("li");
+
+                    newLi.Attributes.Add("Height", "1em");
+
+
+                    LinkButton LinkButton1 = new LinkButton();
+
+
+
+
+                    LinkButton1.Text = lb.Text;
+                    LinkButton1.ToolTip = lb.ToolTip;
+                    LinkButton1.Click += new EventHandler(NabBarClick);
+
+
+                    /*   FilesNabBarButtons.Add(LinkButton1);
+                       FilesNabBarLi.Add(newLi);*/
+
+                    newLi.Controls.Add(LinkButton1);
+                    navbtnlist.Controls.Add(newLi);
+
+
+                }
+
             }
 
 
+        }
+
+
+        public static List<LinkButton> FilesNabBarButtons = new List<LinkButton>();
+        public static List<HtmlGenericControl> FilesNabBarLi = new List<HtmlGenericControl>();
+
+        protected void NabBarClick(object sender, EventArgs e)
+
+        {
+            
+            bool last = ((LinkButton)sender).Text.Equals(FilesNabBarButtons.Last().Text);
+            if (!last) { 
+            List<LinkButton> FilesNabBarButtonsTemp = new List<LinkButton>();
+                List<HtmlGenericControl> FilesNabBarLiTemp = new List<HtmlGenericControl>();
+               
+                FilesNabBarButtonsTemp.Clear();
+            FilesNabBarLiTemp.Clear();
+        int i = 0;
+
+
+            HtmlGenericControl tempUl = new HtmlGenericControl("ul");
+        
+            foreach (LinkButton lb in FilesNabBarButtons)
+            {
+
+                if (!lb.ToolTip.Equals(((LinkButton)sender).ToolTip))
+                {
+                    tempUl.Controls.Add(FilesNabBarLi[i]);
+                    FilesNabBarLiTemp.Add(FilesNabBarLi[i]);
+                    FilesNabBarButtonsTemp.Add(lb);
+                } else if (lb.ToolTip.Equals(((LinkButton)sender).ToolTip)) {
+
+                    tempUl.Controls.Add(FilesNabBarLi[i]);
+                    FilesNabBarLiTemp.Add(FilesNabBarLi[i]);
+                    FilesNabBarButtonsTemp.Add(lb);
+
+                    break;
+
+                }
+                i++;
+            }
+                FilesNabBarButtons.Clear();
+                FilesNabBarLi.Clear();
+                navbtnlist.Controls.Clear();
+                FilesNabBarButtons =FilesNabBarButtonsTemp;
+              
+            FilesNabBarLi = FilesNabBarLiTemp;
+                navbtnlist = tempUl;
+
+            }
+            SetNavBar();
+            EnterFolderMethod(Convert.ToInt32(((LinkButton)sender).ToolTip), ((LinkButton)sender).Text,true);
+
+              Response.Redirect(Request.RawUrl);
+
+        }
+        public void SetFiledNavBar(int FolderID, string FolderName)
+        {
+
 
             HtmlGenericControl newLi = new HtmlGenericControl("li");
-            HtmlGenericControl newLi1 = new HtmlGenericControl("li");
 
             newLi.Attributes.Add("Height", "1em");
-            newLi1.Attributes.Add("Height", "1em");
 
 
             LinkButton LinkButton1 = new LinkButton();
-            LinkButton LinkButton11 = new LinkButton();
 
 
-
-
-            LinkButton1.Text = "Add";
-            LinkButton11.Text = "Add11";
+            LinkButton1.Text = FolderName;
+            LinkButton1.ToolTip = FolderID.ToString();
+      
+            LinkButton1.Click += new EventHandler(NabBarClick);
+   
+            FilesNabBarButtons.Add(LinkButton1);
+            FilesNabBarLi.Add(newLi);
 
             newLi.Controls.Add(LinkButton1);
-            newLi1.Controls.Add(LinkButton11);
-            NavBtnList.Controls.Add(newLi);
-            NavBtnList.Controls.Add(newLi1);
-
-
+            navbtnlist.Controls.Add(newLi);
 
         }
         public void SelectFolder(int folderID = -1)
@@ -75,10 +200,7 @@ namespace Front.Pages
             {
                 CurrentFolderID = folderID;
 
-
             }
-
-
 
             Users user = (Users)Session["User"];
 
@@ -111,7 +233,7 @@ namespace Front.Pages
                 i++;
             }
 
-           
+
             DataGridUsers.DataSource = ShownFiles;
 
 
@@ -140,7 +262,6 @@ namespace Front.Pages
                 string ext = FileUploadControl.PostedFile.ContentType;
                 string size = "";
 
-                //      string sizeInMb =  (FileUploadControl.PostedFile.ContentLength/1024.0/1024.0).ToString("0.0") + " - Mb";
                 if ((FileUploadControl.PostedFile.ContentLength / 1024 / 1024) == 0)
                 {
 
@@ -158,10 +279,7 @@ namespace Front.Pages
                 ff.Type = ext;
                 ff.Size = size + "";
                 ff.Date = DateTime.Now.ToString("MM / dd / yyyy hh: mm tt");
-                /*
-                            FileInfo fi = new FileInfo(filename);
-                            string ext = fi.Extension;*/
-                // FileAdrs.Text = filename;
+        
                 if (filename.Length != 0)
                 {
                     string contentType = FileUploadControl.PostedFile.ContentType;
@@ -185,8 +303,6 @@ namespace Front.Pages
 
         protected void ShowShareButtons(object sender, EventArgs e)
         {
-            // DataGridUsers.Columns[1].Visible= true;
-
             foreach (DataGridColumn dc in DataGridUsers.Columns)
             {
 
@@ -202,8 +318,8 @@ namespace Front.Pages
         {
 
 
-            if(NewFolderName.Text.Length>0)
-            { 
+            if (NewFolderName.Text.Length > 0)
+            {
                 ff.Name = NewFolderName.Text;
                 ff.Type = "- Folder";
                 ff.Size = null;
@@ -217,7 +333,8 @@ namespace Front.Pages
 
 
         }
-        public void InsertFFsAndFolders() {
+        public void InsertFFsAndFolders()
+        {
 
             int newFFID = Preform.InsertFF((Users)Session["User"], ff);
             Preform.InsertOwnedFF((Users)Session["User"], newFFID, CurrentFolderID);
@@ -235,7 +352,7 @@ namespace Front.Pages
 
             if (SetUpFile())
             {
-             
+
 
                 InsertFFsAndFolders();
             }
@@ -244,8 +361,8 @@ namespace Front.Pages
 
 
         }
-        
-                protected void DownloadFile(object sender, EventArgs e)
+
+        protected void DownloadFile(object sender, EventArgs e)
         {
 
             FF SelectedFile = new FF();
@@ -263,12 +380,30 @@ namespace Front.Pages
         }
         protected void EnterFolder(object sender, EventArgs e)
         {
+            string name = "";
+            CurrentFolderID = Convert.ToInt32(((LinkButton)sender).ToolTip);
+            foreach (DataRow dr in FFs.Rows) {
+                if (dr["FFID"].ToString().Equals(((LinkButton)sender).ToolTip)) {
 
+                    name = dr["Name"] + "";
+
+
+                }
+            }
+            EnterFolderMethod(CurrentFolderID,name,false);
+        }
+
+        public void EnterFolderMethod(int FolderID,string name,bool fromNav)
+        {
+
+            if (!fromNav) {
+            SetFiledNavBar(FolderID, name);
+            }
+
+            SelectFolder(FolderID);
 
         }
-         
-        
-   
+
         public void ByteArrayToDownload(FF SelectedFile)
         {
 
