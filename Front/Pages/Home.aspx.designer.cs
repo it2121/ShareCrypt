@@ -24,6 +24,15 @@ namespace Front.Pages
         protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
+        /// ButtonsBar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel ButtonsBar;
+
+        /// <summary>
         /// ManageGridButtonHide control.
         /// </summary>
         /// <remarks>
@@ -49,6 +58,24 @@ namespace Front.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton TestButton;
+
+        /// <summary>
+        /// ShowShared control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton ShowShared;
+
+        /// <summary>
+        /// ShowOwn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton ShowOwn;
 
         /// <summary>
         /// PlaceHolder control.

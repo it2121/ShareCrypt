@@ -80,7 +80,7 @@
 </asp:ScriptManager>
         <!DOCTYPE html>
 
-
+        <asp:Panel runat="server" ID="ButtonsBar" >
             <div class="row " style="margin-bottom:1em">
     
                       <div class="col-auto">
@@ -173,7 +173,32 @@
 
                 </div>
             </div>
+                      <div class="col-auto">
+                <div class="field buttons align-items-end">
 
+                      
+
+
+     <asp:linkbutton runat="server" Visible="true" style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Shared"
+                        onclick="ShowSharedList"
+                        ID="ShowShared"
+                        class=" button is-danger is-light">Show Shared Files
+                       
+                        <i class="fas fa-eye " style="margin-left: 1em">
+
+                        </i></asp:linkbutton>
+                    
+     <asp:linkbutton runat="server" style="background-color: white; color:#f39658  ; font: bold; border-color:#f39658" text="Shared"
+                        onclick="ShowSharedList"
+                         ID="ShowOwn"
+         Visible="false" 
+                        class=" button is-danger is-light">Show Own Files 
+                       
+                        <i class="fas fa-eye " style="margin-left: 1em">
+
+                        </i></asp:linkbutton>
+                </div>
+            </div>
             <div class="col-auto">
                 <div class="field buttons align-items-end">
 
@@ -190,7 +215,7 @@
             </div>
 
         </div>
-
+            </asp:Panel>
         <div class="row" >
             <div class="col-12">
 
@@ -202,14 +227,13 @@
 
                     </asp:PlaceHolder>
                     <ul id="navbtnlist" runat="server">
-                    <%--    <li id="rootbtnli" runat="server">
-                            <asp:linkbutton   runat ="server" onclick="NabBarClick"  text="root" class="button bg-transparent border-0" height="1em" tooltip="1" enabled="true" visible="true" />
-                        </li>--%>
+          
                     </ul>
                 </nav>
             </div>
 
-
+          
+                
 
         </div>
         <div class="row">
@@ -219,7 +243,7 @@
 
 
 
-                <asp:DataGrid runat="server" ID="DataGridUsers" Width="100%" class="table table-striped  table-hover border-0 " AutoGenerateColumns="false">
+                <asp:DataGrid runat="server" Visible="true" ID="DataGridUsers" Width="100%" class="table table-striped  table-hover border-0 " AutoGenerateColumns="false">
 
 
                     <Columns>
@@ -254,7 +278,7 @@
 
                           <asp:TemplateColumn  Visible="false"  HeaderText="Share" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
                             <ItemTemplate  >
-                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-info is-outlined" ID="btn_Share" runat="server"  ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-share " ></i></asp:LinkButton>
+                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-info is-outlined" ID="btn_Share" runat="server"  Visible='<%# Eval("Type").ToString() == "- Folder" ? false:true  %>'   ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-share " ></i></asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateColumn>
                             <asp:TemplateColumn  Visible="false"  HeaderText="Move" ItemStyle-Width="1em"  ItemStyle-HorizontalAlign="center">
@@ -287,6 +311,10 @@
                     </Columns>
 
                 </asp:DataGrid>
+               
+                
+                
+                
                 <script>
 
 

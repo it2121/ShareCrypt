@@ -24,9 +24,11 @@ namespace Front.Pages
     {
         static FF ff = new FF();
         static OwnedFF ownedff = new OwnedFF();
+        static Shared shared = new Shared();
         static int CurrentFolderID = 1;
         static DataTable FFs = null;
         static DataTable OwnedFFs = null;
+        static DataTable Shareds = null;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -96,15 +98,11 @@ namespace Front.Pages
                     LinkButton LinkButton1 = new LinkButton();
 
 
-
-
                     LinkButton1.Text = lb.Text;
                     LinkButton1.ToolTip = lb.ToolTip;
                     LinkButton1.Click += new EventHandler(NabBarClick);
 
 
-                    /*   FilesNabBarButtons.Add(LinkButton1);
-                       FilesNabBarLi.Add(newLi);*/
 
                     newLi.Controls.Add(LinkButton1);
                     navbtnlist.Controls.Add(newLi);
@@ -195,7 +193,7 @@ namespace Front.Pages
             navbtnlist.Controls.Add(newLi);
 
         }
-        public void SelectFolder(int folderID = -1)
+        public void SelectFolder(int folderID = -1,int SharedFlag=0)
         {
 
             if (folderID != CurrentFolderID)
@@ -205,41 +203,67 @@ namespace Front.Pages
             }
 
             Users user = (Users)Session["User"];
-
-
-            IEnumerable<FF> GerFFs = Preform.GetUserFF(user);
-            IEnumerable<OwnedFF> OwnedFF = Preform.GetOwnedFF(user);
-
-            FFs = IEnumerableExt.Ext_ToDataTable(GerFFs);
-            OwnedFFs = IEnumerableExt.Ext_ToDataTable(OwnedFF);
-
-
-
-            FFs.Columns.Remove("Data");
-            DataTable ShownFiles = FFs.Clone();
-
-
-            ShownFiles.Rows.Clear();
-
-            int i = 0;
-            foreach (DataRow dr in FFs.Rows)
+            DataTable ShownFiles=new DataTable();
+            if (SharedFlag == 0)
             {
+                IEnumerable<FF> GerFFs = Preform.GetUserFF(user);
+                IEnumerable<OwnedFF> OwnedFF = Preform.GetOwnedFF(user);
 
-                if (OwnedFF.ElementAt(i).ParantID == CurrentFolderID)
+                FFs = IEnumerableExt.Ext_ToDataTable(GerFFs);
+                OwnedFFs = IEnumerableExt.Ext_ToDataTable(OwnedFF);
+
+
+
+                FFs.Columns.Remove("Data");
+                 ShownFiles = FFs.Clone();
+
+
+                ShownFiles.Rows.Clear();
+
+                int i = 0;
+                foreach (DataRow dr in FFs.Rows)
                 {
 
+                    if (OwnedFF.ElementAt(i).ParantID == CurrentFolderID)
+                    {
 
-                    ShownFiles.ImportRow(dr);
 
+                        ShownFiles.ImportRow(dr);
+
+                    }
+                    i++;
                 }
-                i++;
+                DataGridUsers.DataSource = ShownFiles;
+
+
+                DataGridUsers.DataBind();
+            }
+            else {
+
+                IEnumerable<FF> GerFFs = Preform.GetFfFromShared(user);
+                IEnumerable<Shared> ShareFF = Preform.GetShared(user);
+
+                FFs = IEnumerableExt.Ext_ToDataTable(GerFFs);
+                Shareds = IEnumerableExt.Ext_ToDataTable(ShareFF);
+
+
+
+                //FFs.Columns.Remove("Data");
+                ShownFiles = FFs.Clone();
+
+
+                DataGridUsers.DataSource = FFs;
+
+
+                DataGridUsers.DataBind();
+
+
+
+
+
             }
 
-
-            DataGridUsers.DataSource = ShownFiles;
-
-
-            DataGridUsers.DataBind();
+       
 
 
 
@@ -303,6 +327,25 @@ namespace Front.Pages
         }
 
 
+        protected void ShowSharedList(object sender, EventArgs e)
+        {
+            if (ButtonsBar.Visible)
+            {
+                SelectFolder(CurrentFolderID, 1);
+                ButtonsBar.Visible = false;
+                ShowShared.Visible = false;
+                ShowOwn.Visible = true;
+            }
+            else {
+
+                SelectFolder(CurrentFolderID);
+                ButtonsBar.Visible = true;
+                ShowShared.Visible = true;
+                ShowOwn.Visible = false;
+            }
+
+        }
+     
         protected void ShowShareButtons(object sender, EventArgs e)
         {
             foreach (DataGridColumn dc in DataGridUsers.Columns)

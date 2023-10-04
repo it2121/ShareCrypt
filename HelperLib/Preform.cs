@@ -153,6 +153,31 @@ namespace HelperLib
             return FFs;
         }
 
+        public static IEnumerable<Shared> GetShared(Users user)
+        {
+
+
+
+            IEnumerable<Shared> FFs;
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    @SharedToID = user.ID
+
+                };
+
+                string sql = "dbo.GetShared";
+                FFs = cnn.Query<Shared>(sql, pp, commandType: CommandType.StoredProcedure);
+
+
+
+            }
+
+            return FFs;
+
+
+        }   
         public static IEnumerable<OwnedFF> GetOwnedFF(Users user)
         {
 
@@ -176,15 +201,40 @@ namespace HelperLib
 
             return FFs;
 
+
+        }
+
+        public static IEnumerable<FF> GetFfFromShared(Users user)
+        {
+
+
+
+             IEnumerable<FF> FFs ;
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    @SharedToID = user.ID
+
+                };
+
+                string sql = "dbo.GetShared";
+                FFs = cnn.Query< FF>(sql, pp, commandType: CommandType.StoredProcedure);
+
+              
+
+            }
+
+            return FFs;
+            
             /*  FF u=null;
             foreach (var p in FFs) 
             {
               u= p;
             }
             return u;*/
-
+        
         }
-
         public static IEnumerable<FF> GetUserFF(Users user)
         {
 
