@@ -23,6 +23,52 @@ namespace HelperLib
     public static class Preform
     {
 
+        public static void MoveOwnedFF(OwnedFF OwnedFf, FF ff)
+        {
+            
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    ParantID = OwnedFf.ParantID,
+                    @FFID = ff.FFID
+                  
+
+                };
+
+
+                string sql = "dbo.MoveOwnedFF";
+
+
+                cnn.Execute(sql, pp, commandType: CommandType.StoredProcedure);
+
+
+
+
+            }
+        }  public static void DeleteFFAndOwnedFF(FF ff)
+        {
+            
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    FFID = ff.FFID
+                  
+
+                };
+
+
+                string sql = "dbo.DeleteFFAndOwnedFF";
+
+
+                cnn.Execute(sql, pp, commandType: CommandType.StoredProcedure);
+
+
+
+
+            }
+        }
         public static void InsertOwnedFF(Users user, int ffid, int parantID)
         {
             

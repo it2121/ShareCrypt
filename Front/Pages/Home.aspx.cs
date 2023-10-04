@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -22,6 +23,7 @@ namespace Front.Pages
     public partial class Home : System.Web.UI.Page
     {
         static FF ff = new FF();
+        static OwnedFF ownedff = new OwnedFF();
         static int CurrentFolderID = 1;
         static DataTable FFs = null;
         static DataTable OwnedFFs = null;
@@ -329,7 +331,7 @@ namespace Front.Pages
                 InsertFFsAndFolders();
             }
 
-
+            NewFolderName.Text = "";
 
 
         }
@@ -343,6 +345,122 @@ namespace Front.Pages
 
 
             refresh();
+
+        }
+        [WebMethod]
+        public static  void SetFFID(string FFID)
+        {
+            ff.FFID =Convert.ToInt32( FFID);
+            
+
+           
+        }
+        protected void DeleteFF(object sender, EventArgs e)
+        {
+
+            Preform.DeleteFFAndOwnedFF(ff);
+            refresh();
+        }
+        [WebMethod]
+        public static void SetFFIDForDeleting(string FFID)
+        {
+            ff.FFID = Convert.ToInt32(FFID);
+
+           
+        }
+
+    
+        protected void ShareGrid(object sender, EventArgs e)
+        {
+
+            setAllbuttonVisibilityOff();
+            letItBeshown(9);
+
+        } protected void ManageGridHide(object sender, EventArgs e)
+        {
+            setAllbuttonVisibilityOff();
+
+            ManageGridButtonHide.Visible = false;
+
+            ManageGridButton.Visible = true;
+
+
+        }
+        protected void ManageGrid(object sender, EventArgs e)
+        {
+
+
+
+            setAllbuttonVisibilityOff();
+            letItBeshown(10);
+            letItBeshown(11);
+            
+
+                ManageGridButtonHide.Visible = true;
+
+                ManageGridButton.Visible = false;
+         
+
+
+
+
+        }
+
+        protected void MoveSetFFID(object sender, EventArgs e)
+        {
+            ff.FFID = Convert.ToInt32(((LinkButton)sender).ToolTip);
+
+            //  select colmn
+            setAllbuttonVisibilityOff();
+            letItBeshown(7);
+        }
+
+        public void letItBeshown(int letItBeshown) {
+
+
+
+
+
+            if(letItBeshown!=0)
+            DataGridUsers.Columns[letItBeshown].Visible = true;
+
+
+
+
+        }
+
+        public void setAllbuttonVisibilityOff() {
+
+            //  select colmn
+            DataGridUsers.Columns[7].Visible = false;
+            //  delete colmn
+            DataGridUsers.Columns[11].Visible = false;
+            //  move colmn
+            DataGridUsers.Columns[10].Visible = false;
+
+
+            //  share colmn
+            DataGridUsers.Columns[9].Visible = false;
+
+        }
+        protected void MoveOwnedFF(object sender, EventArgs e)
+        {
+         
+                
+                    ownedff.ParantID =Convert.ToInt32(((LinkButton)sender).ToolTip);
+                
+                
+            
+            Preform.MoveOwnedFF (ownedff, ff);
+
+
+            setAllbuttonVisibilityOff();
+
+            ManageGridButtonHide.Visible = false;
+
+            ManageGridButton.Visible = true;
+            refresh();
+
 
         }
         protected void Upload(object sender, EventArgs e)

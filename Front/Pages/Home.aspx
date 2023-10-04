@@ -1,4 +1,6 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Site.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="Front.Pages.Home" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Site.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" 
+    MaintainScrollPositionOnPostBack="true"
+    Inherits="Front.Pages.Home" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
@@ -20,17 +22,7 @@
       
     </script>
 
-    <script>
 
-        function showFolderName() {
-            document.getElementById('FolderNamePanel').style.display = "block";
-            document.getElementById('UploadPanel').style.display = "none";
-        }
-        function showUploadFile() {
-            document.getElementById('FolderNamePanel').style.display = "none";
-            document.getElementById('UploadPanel').style.display = "block";
-        }
-    </script>
     <script>
 
 
@@ -84,6 +76,8 @@
         <br />
         <br />
         <br />
+     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true">
+</asp:ScriptManager>
         <!DOCTYPE html>
 
 
@@ -117,16 +111,23 @@
                     <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
 
 </button>--%>
-
-
-
-     <linkbutton style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Manage  Files"
+                    
+     <asp:linkbutton runat="server" Visible="false" style="background-color: white; color: #f35858; font: bold; border-color:#f39658" text="Hide Managment Buttons"
                         data-target="modal-js-example"
-                        class="js-modal-trigger button is-fullwidth  align align-content-center  button is-ou">Manage Files  
+                        OnClick="ManageGridHide"
+         id="ManageGridButtonHide"
+                        class="button is-fullwidth   align align-content-center  button is-ou" >Hide Managment Buttons
                         
-                        <i class="fas fa-edit " style="margin-left: 1em">
+                        <i class="fa-solid fa-eye-slash " style="margin-left: 1em"></i></asp:linkbutton>
 
-                        </i></linkbutton>
+
+     <asp:linkbutton runat="server" style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Manage  Files"
+                        data-target="modal-js-example"
+                        OnClick="ManageGrid"
+         id="ManageGridButton"
+                        class="button is-fullwidth   align align-content-center  button is-ou" >Manage Files  
+                        
+                        <i class="fas fa-edit " style="margin-left: 1em"></i></asp:linkbutton>
 
                 </div>
             </div>
@@ -162,7 +163,7 @@
 
                     <asp:LinkButton  ID="TestButton"  style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Share Files"
                        runat="server"
-                        OnClick="ShowShareButtons"
+                        OnClick="ShareGrid"
                         class="js-modal-trigger button is-fullwidth  align align-content-center  button is-ou">Share Files  
                         
                         <i class="fas fa-share " style="margin-left: 1em">
@@ -237,7 +238,11 @@
                         <asp:BoundColumn HeaderText="Date" DataField="Date" />
 
 
-
+                               <asp:TemplateColumn  Visible="false"  HeaderText="Select" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
+                            <ItemTemplate  >
+                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-info is-outlined" ID="btn_SelectFolder" OnClick=  "MoveOwnedFF"  Visible='<%# Eval("Type").ToString() == "- Folder" ? true:false  %>'  runat="server"  ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-circle-check " ></i></asp:LinkButton>
+                            </ItemTemplate>
+                        </asp:TemplateColumn>
                        
 
                         <asp:TemplateColumn   HeaderText="" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
@@ -249,10 +254,35 @@
 
                           <asp:TemplateColumn  Visible="false"  HeaderText="Share" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
                             <ItemTemplate  >
-                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-primary is-outlined" ID="btn_Download" runat="server"  alt=' <%# ((Eval("OwnerID"))) %> ' ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-share " ></i></asp:LinkButton>
+                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-info is-outlined" ID="btn_Share" runat="server"  ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-share " ></i></asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateColumn>
+                            <asp:TemplateColumn  Visible="false"  HeaderText="Move" ItemStyle-Width="1em"  ItemStyle-HorizontalAlign="center">
+                            <ItemTemplate  >
+                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-info is-outlined" ID="btn_Move" runat="server" 
+                                    OnClick="MoveSetFFID"  ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-dolly" ></i></asp:LinkButton>
+                            </ItemTemplate>
 
+                        </asp:TemplateColumn>
+
+                            <asp:TemplateColumn  Visible="false"  HeaderText="Delete" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">  
+
+                                <ItemTemplate  >
+                                <%--<LinkButton   data-target="modal-js-example"  style="Width:20px; Height:20px"   class="js-modal-trigger button is-danger is-outlined" ID="btn_Download"  OnClick= "showDeleteConform(\'' +<%# ((Eval("FFID"))) %> + '\')"  ToolTip=' <%# ((Eval("FFID"))) %> '>  <i  class="fas fa-trash " ></i></LinkButton>--%>
+
+                                <Linkbutton
+                                    data-target="modal-js-example"  style="Width:20px; Height:20px"  
+                                    class="js-modal-trigger button is-danger is-outlined" ID="btn_Delete"  
+                            onclick='<%# String.Format("showDeleteConform(\"{0}\")",Eval("FFID"))%>'
+                                    ToolTip=' <%# ((Eval("FFID"))) %> '>  <i  class="fas fa-trash " ></i>
+
+                                </Linkbutton>
+
+
+
+                            </ItemTemplate>
+
+                        </asp:TemplateColumn>
 
                     </Columns>
 
@@ -276,7 +306,47 @@
             <div class="box bg-light">
 
 
+                      <panel id="DeleteConform" style="display:none;">
 
+                <p>Warrning!!</p>
+
+
+                <br />
+
+
+                <div class="row">
+                    <div  class="col-12">
+                         <center>
+                   
+                        
+                             <asp:Label runat="server"  ID="TextBox1" class="label "  Text="This File Will Be Permenantly Deleted, Are you sure you want to Delete it?"></asp:Label>
+                  
+                                </center>
+                    </div>
+      
+                </div>
+                <br />
+                <br />
+              
+                <div class="row">
+                   
+                    <div class="col-6">
+   <center>
+                   <asp:LinkButton ID="LinkButton1"  onclick="DeleteFF" runat="server" Font-Bold="true" Width="75%"  Text="Create" class=" button is-danger  align align-content-center text-white ">Delete </asp:LinkButton>
+
+         </center>
+                    </div>
+                        <div class="col-6">
+   <center>
+                   <asp:LinkButton ID="LinkButton2"   runat="server" Font-Bold="true" Width="75%" Text="Create" class=" button is-info  align align-content-center text-white ">Keep File </asp:LinkButton>
+
+         </center>
+                    </div>
+                </div>
+                   
+                <br />
+
+                </panel>
 
 
 
@@ -314,19 +384,6 @@
                 <br />
 
                 </panel>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -382,10 +439,34 @@
             </div>
         </div>
 
-        <button class="modal-close is-large" aria-label="close"></button>
+        <button  class="modal-close is-large" aria-label="close"></button>
     </div>
 
 
+        <script type="text/javascript">
 
+            function showFolderName() {
+                document.getElementById('FolderNamePanel').style.display = "block";
+                document.getElementById('UploadPanel').style.display = "none";
+                document.getElementById('DeleteConform').style.display = "none";
+
+            }
+
+            function showDeleteConform(FFID) {
+                document.getElementById('DeleteConform').style.display = "block";
+                document.getElementById('FolderNamePanel').style.display = "none";
+                document.getElementById('UploadPanel').style.display = "none";
+
+
+                PageMethods.SetFFID(FFID);
+             
+            }
+            function showUploadFile() {
+                document.getElementById('FolderNamePanel').style.display = "none";
+                document.getElementById('UploadPanel').style.display = "block";
+                document.getElementById('DeleteConform').style.display = "none";
+
+            }
+        </script>
 
 </asp:Content>
