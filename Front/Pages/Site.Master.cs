@@ -18,7 +18,6 @@ namespace Front.Pages
                 if (Session["User"] == null && Session["redirected"].ToString().Equals("0"))
                 {
                 Session["redirected"] = "1";
-                   // redirected=true;
                     Response.Redirect("Log.aspx");
 
                 }

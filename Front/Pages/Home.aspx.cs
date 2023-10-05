@@ -252,7 +252,6 @@ namespace Front.Pages
 
 
 
-                //FFs.Columns.Remove("Data");
                 ShownFiles = FFs.Clone();
 
 
@@ -336,14 +335,12 @@ namespace Front.Pages
             if (ShowShared.Visible)
             {
                 SelectFolder(CurrentFolderID, 1);
-              //  ButtonsBar.Visible = false;
                 ShowShared.Visible = false;
                 ShowOwn.Visible = true;
             }
             else {
 
                 SelectFolder(CurrentFolderID);
-              //  ButtonsBar.Visible = true;
                 ShowShared.Visible = true;
                 ShowOwn.Visible = false;
             }
@@ -402,8 +399,7 @@ namespace Front.Pages
             ff.FFID = Convert.ToInt32(FFIDo);
           ff=  Preform.GetFF(ff);
 
-            //  byte[] d = Encoding.ASCII.GetBytes(dr["Data"].ToString());
-            encData= Cryptography.AES_Decrypt(ff.Data, "ass",ff.Name);
+            encData= Cryptography.AES_Decrypt(ff.Data, "Password", ff.Name);
             ff.Name = ff.Name.Substring(0, ff.Name.IndexOf('#'));
 
           
@@ -443,8 +439,7 @@ namespace Front.Pages
             ff.FFID = Convert.ToInt32(FFIDo);
           ff=  Preform.GetFF(ff);
 
-            //  byte[] d = Encoding.ASCII.GetBytes(dr["Data"].ToString());
-            encData= Cryptography.AES_Encrypt(ff.Data, "ass",ff.Name);
+            encData= Cryptography.AES_Encrypt(ff.Data, "Password",ff.Name);
 
             ff.Name = ff.Name + "# Encrypted";
             ff.Data = encData;
@@ -477,7 +472,6 @@ namespace Front.Pages
 
             Preform.InsertShared(user, ff, SharedToID);
 
-           // refresh();
 
         }      
         protected void DeleteFF(object sender, EventArgs e)
@@ -509,7 +503,6 @@ namespace Front.Pages
                 if (dr["FFID"].Equals(((LinkButton)sender).ToolTip))
                     
                 {
-                    //encData= Cryptography.AES_Encrypt(d, "ass");
 
 
                 }
@@ -562,7 +555,6 @@ namespace Front.Pages
         {
             ff.FFID = Convert.ToInt32(((LinkButton)sender).ToolTip);
 
-            //  select colmn
             setAllbuttonVisibilityOff();
             letItBeshown(7);
         }

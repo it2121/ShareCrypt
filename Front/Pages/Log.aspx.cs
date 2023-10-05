@@ -17,7 +17,6 @@ namespace Front.Pages
             if (!IsPostBack)
             {
                 Session["redirected"] = "1";
-               // UsernameTB.Text = fuckoff;
 
 
             }
