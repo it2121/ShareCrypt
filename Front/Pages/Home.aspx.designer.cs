@@ -105,6 +105,42 @@ namespace Front.Pages
         protected global::System.Web.UI.WebControls.DataGrid DataGridUsers;
 
         /// <summary>
+        /// TextBox11 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label TextBox11;
+
+        /// <summary>
+        /// ShareToUserID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ShareToUserID;
+
+        /// <summary>
+        /// LinkButton1share control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButton1share;
+
+        /// <summary>
+        /// LinkButton2share control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButton2share;
+
+        /// <summary>
         /// TextBox1 control.
         /// </summary>
         /// <remarks>

@@ -69,6 +69,30 @@ namespace HelperLib
 
             }
         }
+        public static void InsertShared(Users user, FF ff, int SharedToID)
+        {
+            
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    OwnerID = user.ID,
+                    SharedToID = SharedToID,
+                    FFID = ff.FFID
+
+                };
+
+
+                string sql = "dbo.InsertShared";
+
+
+                cnn.Execute(sql, pp, commandType: CommandType.StoredProcedure);
+
+
+
+
+            }
+        }
         public static void InsertOwnedFF(Users user, int ffid, int parantID)
         {
             
@@ -264,6 +288,39 @@ namespace HelperLib
               u= p;
             }
             return u;*/
+        
+        }
+        public static int GerUserByUsername(string username)
+        {
+         
+  
+            //string text = "";
+            IEnumerable<Users> FFs ;
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            {
+                var pp = new
+                {
+                    Username = username,
+                    
+
+                };
+
+                string sql = "dbo.GerUserByUsername";
+                FFs = cnn.Query<Users>(sql, pp, commandType: CommandType.StoredProcedure);
+
+              
+
+                /*   foreach (var p in FFs)
+                   {
+                       text+= $"{p.Username} {p.Email} {p.Fullname}";
+                   }*/
+            }
+            Users u=null;
+            foreach (var p in FFs) 
+            {
+              u= p;
+            }
+            return u.ID;
         
         }
         public static Users LogIn(string username1,string password1)

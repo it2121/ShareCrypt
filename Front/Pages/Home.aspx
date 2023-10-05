@@ -93,7 +93,9 @@
 
 
      <linkbutton style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="New Folder"
-                        data-target="modal-js-example"
+        
+         
+         data-target="modal-js-example"
                         onclick="showFolderName()"
                         class="js-modal-trigger button is-fullwidth  align align-content-center  button is-ou">New Folder  
                        
@@ -276,11 +278,25 @@
                             </ItemTemplate>
                         </asp:TemplateColumn>
 
+
+
                           <asp:TemplateColumn  Visible="false"  HeaderText="Share" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">
                             <ItemTemplate  >
-                                <asp:LinkButton  Width="20px" Height="20px"  class=" button is-info is-outlined" ID="btn_Share" runat="server"  Visible='<%# Eval("Type").ToString() == "- Folder" ? false:true  %>'   ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-share " ></i></asp:LinkButton>
+                                <LinkButton 
+                                    style="Width:20px; Height:20px"  
+                                    data-target="modal-js-example" 
+                                    class="js-modal-trigger button is-info is-outlined"
+                                    ID="btn_Share" runat="server" 
+                                    onclick='<%# String.Format("showShareForm(\"{0}\")",Eval("FFID"))%>'
+
+                                    Visible='<%# Eval("Type").ToString() == "- Folder" ? false:true  %>'   
+                                    ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-share " ></i></LinkButton>
                             </ItemTemplate>
                         </asp:TemplateColumn>
+
+
+
+
                             <asp:TemplateColumn  Visible="false"  HeaderText="Move" ItemStyle-Width="1em"  ItemStyle-HorizontalAlign="center">
                             <ItemTemplate  >
                                 <asp:LinkButton  Width="20px" Height="20px"  class=" button is-info is-outlined" ID="btn_Move" runat="server" 
@@ -334,7 +350,54 @@
             <div class="box bg-light">
 
 
-                      <panel id="DeleteConform" style="display:none;">
+                      <panel id="ShareForm" style="display:none;">
+
+                <p>Search</p>
+
+
+                <br />
+
+
+                <div class="row">
+                    <div  class="col-12">
+                         <center>
+                   
+                        
+                             <asp:Label runat="server"  ID="TextBox11" class="label "  Text="Please Search For a User by Username To Share The File With. "></asp:Label>
+                  
+                                </center>
+                    </div>
+            <div  class="col-12">
+                         <center>
+                   
+                        
+                        <asp:TextBox runat="server"  ID="ShareToUserID" class="input is-warning " BackColor="LightGray" placeholder="Uesrname"></asp:TextBox>
+                  
+                                </center>
+                    </div>
+                </div>
+                <br />
+                <br />
+              
+                <div class="row">
+                   
+                    <div class="col-6">
+   <center>
+                   <asp:LinkButton ID="LinkButton1share"  onclick="ShareFile" runat="server" Font-Bold="true" Width="75%"  Text="Create" class=" button  is-info    align align-content-center text-white ">Share </asp:LinkButton>
+
+         </center>
+                    </div>
+                        <div class="col-6">
+   <center>
+                   <asp:LinkButton ID="LinkButton2share"   runat="server" Font-Bold="true" Width="75%" Text="Create" class=" button is-danger  align align-content-center text-white ">Cancel</asp:LinkButton>
+
+         </center>
+                    </div>
+                </div>
+                   
+                <br />
+
+                </panel> <panel id="DeleteConform" style="display:none;">
 
                 <p>Warrning!!</p>
 
@@ -477,6 +540,7 @@
                 document.getElementById('FolderNamePanel').style.display = "block";
                 document.getElementById('UploadPanel').style.display = "none";
                 document.getElementById('DeleteConform').style.display = "none";
+                document.getElementById('ShareForm').style.display = "none";
 
             }
 
@@ -484,15 +548,27 @@
                 document.getElementById('DeleteConform').style.display = "block";
                 document.getElementById('FolderNamePanel').style.display = "none";
                 document.getElementById('UploadPanel').style.display = "none";
+                document.getElementById('ShareForm').style.display = "none";
 
 
                 PageMethods.SetFFID(FFID);
              
             }
+            function showShareForm(FFID) {
+                document.getElementById('ShareForm').style.display = "block";
+                document.getElementById('DeleteConform').style.display = "none";
+                document.getElementById('FolderNamePanel').style.display = "none";
+                document.getElementById('UploadPanel').style.display = "none";
+
+
+                PageMethods.SetFFID(FFID);
+
+            }
             function showUploadFile() {
                 document.getElementById('FolderNamePanel').style.display = "none";
                 document.getElementById('UploadPanel').style.display = "block";
                 document.getElementById('DeleteConform').style.display = "none";
+                document.getElementById('ShareForm').style.display = "none";
 
             }
         </script>

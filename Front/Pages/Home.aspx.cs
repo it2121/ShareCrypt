@@ -329,17 +329,17 @@ namespace Front.Pages
 
         protected void ShowSharedList(object sender, EventArgs e)
         {
-            if (ButtonsBar.Visible)
+            if (ShowShared.Visible)
             {
                 SelectFolder(CurrentFolderID, 1);
-                ButtonsBar.Visible = false;
+              //  ButtonsBar.Visible = false;
                 ShowShared.Visible = false;
                 ShowOwn.Visible = true;
             }
             else {
 
                 SelectFolder(CurrentFolderID);
-                ButtonsBar.Visible = true;
+              //  ButtonsBar.Visible = true;
                 ShowShared.Visible = true;
                 ShowOwn.Visible = false;
             }
@@ -398,7 +398,17 @@ namespace Front.Pages
 
            
         }
-        protected void DeleteFF(object sender, EventArgs e)
+        protected void ShareFile(object sender, EventArgs e)
+        {
+
+         int SharedToID=   Preform.GerUserByUsername(ShareToUserID.Text);
+          Users user = (Users)Session["User"];
+
+            Preform.InsertShared(user, ff, SharedToID);
+
+           // refresh();
+
+        }        protected void DeleteFF(object sender, EventArgs e)
         {
 
             Preform.DeleteFFAndOwnedFF(ff);

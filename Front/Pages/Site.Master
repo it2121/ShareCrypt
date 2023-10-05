@@ -76,7 +76,7 @@ font-family: 'Book Antiqua';
   <div class="navbar-brand">
     <a class="navbar-item" href="" style="max-height:3.5rem">
 
-                                      <img src="../Images/SCLogoNoText.png" style="max-height:3.5rem">
+     <img src="../Images/SCLogoNoText.png" style="max-height:3.5rem">
 
     </a>
 
