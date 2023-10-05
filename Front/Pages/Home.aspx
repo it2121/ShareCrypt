@@ -144,13 +144,14 @@
 
 
 
-     <linkbutton style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Encrypt Files"
-                        data-target="modal-js-example"
-                        class="js-modal-trigger button is-fullwidth  align align-content-center  button is-ou">Encrypt Files  
+     <asp:linkbutton runat="server" ID="somehting" style="background-color: white; color: #f39658; font: bold; border-color:#f39658" text="Encrypt Files"
+                                 OnClick="ShowEncbuttons"
+             
+         class=" button is-fullwidth  align align-content-center  button is-ou">Encrypt Files  
                         
                         <i class="fas fa-hashtag " style="margin-left: 1em">
 
-                        </i></linkbutton>
+                        </i></asp:linkbutton>
 
                 </div>
             </div>
@@ -297,6 +298,7 @@
 
 
 
+
                             <asp:TemplateColumn  Visible="false"  HeaderText="Move" ItemStyle-Width="1em"  ItemStyle-HorizontalAlign="center">
                             <ItemTemplate  >
                                 <asp:LinkButton  Width="20px" Height="20px"  class=" button is-info is-outlined" ID="btn_Move" runat="server" 
@@ -304,7 +306,24 @@
                             </ItemTemplate>
 
                         </asp:TemplateColumn>
+                                <asp:TemplateColumn  Visible="false"  HeaderText="Encrypt" ItemStyle-Width="1em"  ItemStyle-HorizontalAlign="center">
+                            <ItemTemplate  >
+                                <LinkButton  style="Width:20px; Height:20px"   class=" button is-info is-outlined" ID="btn_Enc" 
+                            onclick='<%# String.Format("CallEnc(\"{0}\")",Eval("FFID"))%>'
+                                    
+                                    ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-lock" ></i></LinkButton>
+                            </ItemTemplate>
 
+                        </asp:TemplateColumn>
+                                 <asp:TemplateColumn  Visible="false"  HeaderText="Decrypt" ItemStyle-Width="1em"  ItemStyle-HorizontalAlign="center">
+                            <ItemTemplate  >
+                                <LinkButton   style="Width:20px; Height:20px"  class=" button is-info is-outlined" ID="btn_Dec" 
+                            onclick='<%# String.Format("CallDec(\"{0}\")",Eval("FFID"))%>'
+                                    
+                                    ToolTip=' <%# ((Eval("FFID"))) %> '>  <i class="fas fa-lock-open" ></i></LinkButton>
+                            </ItemTemplate>
+
+                        </asp:TemplateColumn>
                             <asp:TemplateColumn  Visible="false"  HeaderText="Delete" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">  
 
                                 <ItemTemplate  >
@@ -321,7 +340,8 @@
 
 
                             </ItemTemplate>
-
+                                
+                    
                         </asp:TemplateColumn>
 
                     </Columns>
@@ -543,6 +563,23 @@
                 document.getElementById('ShareForm').style.display = "none";
 
             }
+
+            function CallEnc(FFID) {
+      
+
+
+                PageMethods.CallEncr(FFID);
+             
+            }
+
+            function CallDec(FFID) {
+      
+
+
+                PageMethods.CallDecr(FFID);
+             
+            }
+
 
             function showDeleteConform(FFID) {
                 document.getElementById('DeleteConform').style.display = "block";

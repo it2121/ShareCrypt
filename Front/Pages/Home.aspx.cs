@@ -9,6 +9,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Services;
 using System.Web.UI;
@@ -23,6 +25,7 @@ namespace Front.Pages
     public partial class Home : System.Web.UI.Page
     {
         static FF ff = new FF();
+        static Users user = new Users();
         static OwnedFF ownedff = new OwnedFF();
         static Shared shared = new Shared();
         static int CurrentFolderID = 1;
@@ -41,6 +44,7 @@ namespace Front.Pages
 
                 if ((Users)Session["User"] != null)
                 {
+                    user = (Users)Session["User"];
                     SelectFolder(CurrentFolderID);
 
                 }
@@ -193,7 +197,7 @@ namespace Front.Pages
             navbtnlist.Controls.Add(newLi);
 
         }
-        public void SelectFolder(int folderID = -1,int SharedFlag=0)
+        public  void SelectFolder(int folderID = -1,int SharedFlag=0)
         {
 
             if (folderID != CurrentFolderID)
@@ -270,7 +274,7 @@ namespace Front.Pages
 
 
         }
-        public void refresh()
+        public  void refresh()
         {
 
             SelectFolder(CurrentFolderID);
@@ -391,6 +395,73 @@ namespace Front.Pages
 
         }
         [WebMethod]
+        public static  void CallDecr(string FFIDo)
+        {
+            byte[] encData = null;
+            
+            ff.FFID = Convert.ToInt32(FFIDo);
+          ff=  Preform.GetFF(ff);
+
+            //  byte[] d = Encoding.ASCII.GetBytes(dr["Data"].ToString());
+            encData= Cryptography.AES_Decrypt(ff.Data, "ass",ff.Name);
+            ff.Name = ff.Name.Substring(0, ff.Name.IndexOf('#'));
+
+          
+            ff.Data = encData;
+            ff.Date = DateTime.Now.ToString("MM / dd / yyyy hh: mm tt");
+
+            int newFFID = Preform.InsertFF(user, ff);
+            Preform.InsertOwnedFF(user, newFFID, CurrentFolderID);
+
+
+
+
+
+            HttpContext.Current.Response.ContentType = ff.Type;
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.BufferOutput = true;
+            HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment; filename=" + ff.Name);
+            HttpContext.Current.Response.BinaryWrite(ff.Data);
+            HttpContext.Current.Response.Flush();
+
+
+
+
+
+
+
+
+
+
+
+        }
+        [WebMethod]
+        public static  void CallEncr(string FFIDo)
+        {
+            byte[] encData = null;
+            
+            ff.FFID = Convert.ToInt32(FFIDo);
+          ff=  Preform.GetFF(ff);
+
+            //  byte[] d = Encoding.ASCII.GetBytes(dr["Data"].ToString());
+            encData= Cryptography.AES_Encrypt(ff.Data, "ass",ff.Name);
+
+            ff.Name = ff.Name + "# Encrypted";
+            ff.Data = encData;
+            ff.Date = DateTime.Now.ToString("MM / dd / yyyy hh: mm tt");
+
+            int newFFID = Preform.InsertFF(user, ff);
+            Preform.InsertOwnedFF(user, newFFID, CurrentFolderID);
+
+
+
+
+       
+
+
+        }
+       
+        [WebMethod]
         public static  void SetFFID(string FFID)
         {
             ff.FFID =Convert.ToInt32( FFID);
@@ -408,7 +479,8 @@ namespace Front.Pages
 
            // refresh();
 
-        }        protected void DeleteFF(object sender, EventArgs e)
+        }      
+        protected void DeleteFF(object sender, EventArgs e)
         {
 
             Preform.DeleteFFAndOwnedFF(ff);
@@ -429,6 +501,33 @@ namespace Front.Pages
             setAllbuttonVisibilityOff();
             letItBeshown(9);
 
+        } 
+        protected void EncryptFile(object sender, EventArgs e)
+        {
+           
+            foreach (DataRow dr in FFs.Rows)
+                if (dr["FFID"].Equals(((LinkButton)sender).ToolTip))
+                    
+                {
+                    //encData= Cryptography.AES_Encrypt(d, "ass");
+
+
+                }
+                    
+
+
+        }
+
+    
+
+
+    protected void ShowEncbuttons(object sender, EventArgs e)
+        {
+            setAllbuttonVisibilityOff();
+
+            letItBeshown(11);
+            letItBeshown(12);
+
         } protected void ManageGridHide(object sender, EventArgs e)
         {
             setAllbuttonVisibilityOff();
@@ -446,7 +545,7 @@ namespace Front.Pages
 
             setAllbuttonVisibilityOff();
             letItBeshown(10);
-            letItBeshown(11);
+            letItBeshown(13);
             
 
                 ManageGridButtonHide.Visible = true;
@@ -486,14 +585,21 @@ namespace Front.Pages
 
             //  select colmn
             DataGridUsers.Columns[7].Visible = false;
-            //  delete colmn
-            DataGridUsers.Columns[11].Visible = false;
+            //  share colmn
+            DataGridUsers.Columns[9].Visible = false;
             //  move colmn
             DataGridUsers.Columns[10].Visible = false;
 
+            //  encrypt colmn
+            DataGridUsers.Columns[11].Visible = false;
+            //  decrypt colmn
+            DataGridUsers.Columns[12].Visible = false;
+            //  delete colmn
+            DataGridUsers.Columns[13].Visible = false;
+         
 
-            //  share colmn
-            DataGridUsers.Columns[9].Visible = false;
+
+          
 
         }
         protected void MoveOwnedFF(object sender, EventArgs e)
@@ -575,15 +681,15 @@ namespace Front.Pages
 
         }
 
-        public void ByteArrayToDownload(FF SelectedFile)
+        public static void ByteArrayToDownload(FF SelectedFile)
         {
 
-            Response.ContentType = SelectedFile.Type;
-            Response.Clear();
-            Response.BufferOutput = true;
-            Response.AppendHeader("Content-Disposition", "attachment; filename=" + SelectedFile.Name);
-            Response.BinaryWrite(SelectedFile.Data);
-            Response.Flush();
+            HttpContext.Current.Response.ContentType = SelectedFile.Type;
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.BufferOutput = true;
+            HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment; filename=" + SelectedFile.Name);
+            HttpContext.Current.Response.BinaryWrite(SelectedFile.Data);
+            HttpContext.Current.Response.Flush();
 
 
         }
