@@ -11,7 +11,6 @@ namespace Front
         {
             byte[] passwordBytes = Encoding.ASCII.GetBytes(password);
 
-            //string outputFile = $"C:/Users/GAMA/source/repos/ShareCrypt/Front/Files/nigga";
               string pre = Environment.GetEnvironmentVariable("USERPROFILE") + @"\" + "Downloads"+$"/";
             string outputFile =pre+ filename;
             byte[] saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };

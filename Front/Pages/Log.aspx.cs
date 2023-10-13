@@ -18,7 +18,6 @@ namespace Front.Pages
             {
                 Session["redirected"] = "1";
 
-
             }
             }
         protected void SubmitBtn_Click(object sender, EventArgs e)
@@ -27,7 +26,6 @@ namespace Front.Pages
 
             if (user != null)
             {
-
 
 
                 Session["User"] = user;

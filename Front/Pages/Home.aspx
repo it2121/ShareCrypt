@@ -86,9 +86,7 @@
                       <div class="col-auto">
                 <div class="field buttons align-items-end">
 
-                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
 
-</button>--%>
 
 
 
@@ -110,9 +108,7 @@
                       <div class="col-auto">
                 <div class="field buttons align-items-end">
 
-                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
 
-</button>--%>
                     
      <asp:linkbutton runat="server" Visible="false" style="background-color: white; color: #f35858; font: bold; border-color:#f39658" text="Hide Managment Buttons"
                         data-target="modal-js-example"
@@ -138,9 +134,7 @@
                    <div class="col-auto">
                 <div class="field buttons align-items-end">
 
-                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
 
-</button>--%>
 
 
 
@@ -158,9 +152,7 @@
                    <div class="col-auto  ">
                 <div class="field buttons align-items-end ">
 
-                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
 
-</button>--%>
 
 
 
@@ -205,9 +197,6 @@
             <div class="col-auto">
                 <div class="field buttons align-items-end">
 
-                    <%--<button class="js-modal-trigger button is-primary" data-target="modal-js-example">
-
-</button>--%>
 
 
 
@@ -327,7 +316,7 @@
                             <asp:TemplateColumn  Visible="false"  HeaderText="Delete" ItemStyle-Width="1em" ItemStyle-HorizontalAlign="center">  
 
                                 <ItemTemplate  >
-                                <%--<LinkButton   data-target="modal-js-example"  style="Width:20px; Height:20px"   class="js-modal-trigger button is-danger is-outlined" ID="btn_Download"  OnClick= "showDeleteConform(\'' +<%# ((Eval("FFID"))) %> + '\')"  ToolTip=' <%# ((Eval("FFID"))) %> '>  <i  class="fas fa-trash " ></i></LinkButton>--%>
+
 
                                 <Linkbutton
                                     data-target="modal-js-example"  style="Width:20px; Height:20px"  
@@ -500,9 +489,6 @@
 
 
 
-                <%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%>
-                <%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%>
-                <%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%><%--//////////////////////////////////////////--%>
 
                 <panel id="UploadPanel" style="display:none;">
 

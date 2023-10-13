@@ -310,10 +310,6 @@ namespace HelperLib
 
               
 
-                /*   foreach (var p in FFs)
-                   {
-                       text+= $"{p.Username} {p.Email} {p.Fullname}";
-                   }*/
             }
             Users u=null;
             foreach (var p in FFs) 
@@ -360,7 +356,6 @@ namespace HelperLib
         {
 
 
-            //string text = "";
             IEnumerable<FF> FF;
             using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
             {
@@ -375,10 +370,7 @@ namespace HelperLib
 
 
 
-                /*   foreach (var p in FFs)
-                   {
-                       text+= $"{p.Username} {p.Email} {p.Fullname}";
-                   }*/
+         
             }
             FF u = null;
             foreach (var p in FF)
