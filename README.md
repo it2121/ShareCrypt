@@ -7,7 +7,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/it2121/ShareCrypt/">
-    <img src="SCLogo.png" alt="Logo" width="380" height="380">
+    <img src="SCLogo.png" alt="Logo" width="380">
   </a>
 
   <h3 align="center">ShareCrypt</h3>
